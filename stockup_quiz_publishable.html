@@ -1,0 +1,206 @@
+
+<h2 class="sr-only">StockUp investing quiz — test your knowledge across 6 lessons covering stocks, ETFs, portfolios, financial metrics, risk psychology, and next steps.</h2>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.wrap{padding:1.5rem 0;font-family:var(--font-sans)}
+.brand{display:flex;align-items:center;gap:10px;margin-bottom:1.5rem}
+.brand-logo{width:36px;height:36px;border-radius:8px;background:#0F6E56;display:flex;align-items:center;justify-content:center}
+.brand-name{font-size:18px;font-weight:500;color:var(--color-text-primary)}
+.brand-tag{font-size:12px;color:var(--color-text-secondary);margin-left:2px}
+.progress-row{display:flex;align-items:center;gap:12px;margin-bottom:1.5rem}
+.progress-track{flex:1;height:6px;background:var(--color-border-tertiary);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:#0F6E56;border-radius:3px;transition:width .4s ease}
+.progress-label{font-size:13px;color:var(--color-text-secondary);white-space:nowrap;min-width:52px;text-align:right}
+.lesson-pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;padding:4px 10px;border-radius:999px;margin-bottom:1rem}
+.streak{display:inline-flex;align-items:center;gap:5px;font-size:12px;padding:4px 10px;border-radius:999px;background:var(--color-background-secondary);color:var(--color-text-secondary);margin-bottom:1rem;float:right}
+.streak.active{background:#FAEEDA;color:#633806}
+.q-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.75rem}
+.question{font-size:17px;font-weight:500;color:var(--color-text-primary);line-height:1.5;margin-bottom:1.25rem}
+.options{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1rem}
+@media(max-width:500px){.options{grid-template-columns:1fr}}
+.opt{background:var(--color-background-primary);border:1.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 14px;font-size:13px;color:var(--color-text-primary);cursor:pointer;text-align:left;transition:border-color .15s,background .15s;line-height:1.45}
+.opt:hover:not(:disabled){border-color:#0F6E56;background:#E1F5EE}
+.opt.correct{border-color:#0F6E56;background:#E1F5EE;color:#085041;font-weight:500}
+.opt.wrong{border-color:#A32D2D;background:#FCEBEB;color:#791F1F}
+.opt.reveal{border-color:#0F6E56;background:#E1F5EE;color:#085041}
+.opt:disabled{cursor:default}
+.opt-letter{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;border:1.5px solid var(--color-border-secondary);font-size:11px;font-weight:500;margin-right:8px;flex-shrink:0;vertical-align:middle}
+.exp{background:var(--color-background-secondary);border-left:3px solid #0F6E56;border-radius:0 var(--border-radius-md) var(--border-radius-md) 0;padding:10px 14px;font-size:13px;color:var(--color-text-secondary);line-height:1.6;margin-bottom:1rem;animation:fadein .3s ease}
+.exp strong{color:var(--color-text-primary)}
+@keyframes fadein{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.btn-next{width:100%;padding:12px;background:#0F6E56;color:#fff;border:none;border-radius:var(--border-radius-lg);font-size:14px;font-weight:500;cursor:pointer;transition:opacity .15s;display:flex;align-items:center;justify-content:center;gap:6px}
+.btn-next:hover{opacity:.88}
+.btn-next:disabled{opacity:.35;cursor:default}
+.score-wrap{text-align:center;padding:1rem 0}
+.score-circle{width:100px;height:100px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 1rem}
+.score-pct{font-size:32px;font-weight:500;line-height:1}
+.score-sub{font-size:12px;margin-top:2px}
+.score-msg{font-size:16px;font-weight:500;color:var(--color-text-primary);margin-bottom:.5rem}
+.score-note{font-size:13px;color:var(--color-text-secondary);line-height:1.6;margin-bottom:1.5rem}
+.score-breakdown{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:1.5rem}
+.sb-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 8px;text-align:center}
+.sb-label{font-size:11px;color:var(--color-text-secondary);margin-bottom:4px}
+.sb-val{font-size:16px;font-weight:500;color:var(--color-text-primary)}
+.btn-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.btn-outline{padding:10px;background:transparent;border:1.5px solid #0F6E56;color:#0F6E56;border-radius:var(--border-radius-lg);font-size:13px;font-weight:500;cursor:pointer;transition:background .15s}
+.btn-outline:hover{background:#E1F5EE}
+.start-wrap{text-align:center;padding:1rem 0}
+.start-title{font-size:22px;font-weight:500;color:var(--color-text-primary);margin-bottom:.5rem}
+.start-sub{font-size:14px;color:var(--color-text-secondary);line-height:1.6;margin-bottom:1.5rem}
+.lesson-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:1.5rem;text-align:left}
+.lg-card{border-radius:var(--border-radius-md);padding:10px 12px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary)}
+.lg-num{font-size:11px;font-weight:500;margin-bottom:2px}
+.lg-title{font-size:12px;color:var(--color-text-secondary)}
+.btn-start{width:100%;padding:14px;background:#0F6E56;color:#fff;border:none;border-radius:var(--border-radius-lg);font-size:15px;font-weight:500;cursor:pointer;transition:opacity .15s}
+.btn-start:hover{opacity:.88}
+</style>
+
+<div class="wrap">
+  <div class="brand">
+    <div class="brand-logo">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+        <polyline points="3,16 8,9 13,12 19,4" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <polygon points="19,4 22,4 22,7" fill="white"/>
+      </svg>
+    </div>
+    <div>
+      <div class="brand-name">StockUp <span class="brand-tag">Knowledge Quiz</span></div>
+    </div>
+  </div>
+  <div id="root"></div>
+</div>
+
+<script>
+const LESSONS=[
+  {label:"Lesson 1 — Investing basics",color:"#0F6E56",bg:"#E1F5EE",text:"#085041"},
+  {label:"Lesson 2 — Stocks & ETFs",color:"#185FA5",bg:"#E6F1FB",text:"#0C447C"},
+  {label:"Lesson 3 — Your portfolio",color:"#534AB7",bg:"#EEEDFE",text:"#3C3489"},
+  {label:"Lesson 4 — Reading numbers",color:"#BA7517",bg:"#FFF8E1",text:"#633806"},
+  {label:"Lesson 5 — Risk & psychology",color:"#993556",bg:"#FBEAF0",text:"#5A1F35"},
+  {label:"Lesson 6 — Path forward",color:"#0F6E56",bg:"#E1F5EE",text:"#085041"},
+];
+
+const QS=[
+  {l:0,q:"What is the main reason most people never build wealth?",opts:["They don't earn enough money","They were never taught about money and investing","They spend too much on luxury","Banks charge too many fees"],ans:1,exp:"The biggest barrier is knowledge, not income. Most schools never teach investing — which is exactly why StockUp exists."},
+  {l:0,q:"What does compound interest mean in simple terms?",opts:["Interest only for rich people","You earn interest on your money AND on interest already earned","A type of savings account","A fee charged by investment apps"],ans:1,exp:"Compound interest means your money grows on itself. $100 earns $10 → now $110 earns interest → $121 → and so on. Einstein called it the 8th wonder of the world."},
+  {l:0,q:"$500 saved at 0.4%/year vs $500 invested at 8%/year. After 30 years — roughly how much more does investing give you?",opts:["About $200 more","About $500 more","About $4,500 more","About the same"],ans:2,exp:"Investing at 8% for 30 years turns $500 into ~$5,030. Saving at 0.4% gives ~$560. That's a $4,470 difference — from the exact same $500."},
+  {l:0,q:"What is the key message of Lesson 1?",opts:["You need to be rich to invest","Save as much as possible in a bank","Money in a bank loses value to inflation — investing is how you fight back","Wait until you're 25 to start investing"],ans:2,exp:"Inflation means $100 today buys less next year. A bank earning 0.4% doesn't keep up with 3% inflation. Investing grows your money faster than inflation erodes it."},
+  {l:1,q:"What does buying a stock actually mean?",opts:["You lend money to a company","You buy a tiny piece of ownership in a company","You get guaranteed profit every month","You become an employee of the company"],ans:1,exp:"A stock = ownership. Buy 1 share of Apple and you literally own a small piece of Apple. If Apple grows, your piece grows too."},
+  {l:1,q:"What is an ETF and why do beginners love it?",opts:["A bank account with high interest","A basket of many stocks in one purchase — instant diversification","A government savings bond","A subscription for stock tips"],ans:1,exp:"ETF = Exchange Traded Fund. VOO holds the top 500 US companies. One purchase = 500 companies. If one fails, the other 499 protect you."},
+  {l:1,q:"The market is in a 'bear market.' What does this mean?",opts:["Prices are rising and people are optimistic","Trading is closed for a holiday","Prices are falling — but this is often a buying opportunity","Only certain stocks are trading"],ans:2,exp:"Bear market = prices going DOWN. Most people panic and sell. Smart investors see it as a sale. Every bear market in history became a bull market again."},
+  {l:1,q:"You see Apple (AAPL) at $185.42 ▲ +2.3%. What does ▲ +2.3% tell you?",opts:["Apple fell 2.3% today","Apple's profit grew 2.3% this quarter","Apple's price went UP 2.3% today","Apple has 2.3% more shares than yesterday"],ans:2,exp:"The ▲ symbol means the price went UP. +2.3% is today's percentage change. If you held AAPL today, your investment grew 2.3% in one day."},
+  {l:2,q:"What is diversification and why does it matter?",opts:["Buying only the most popular stocks","Spreading money across many investments to reduce risk","Investing only in one country","Checking your portfolio every hour"],ans:1,exp:"If all your money is in 1 stock and it crashes → you lose everything. Spread across 10–20 stocks → one crash barely hurts. Don't put all eggs in one basket."},
+  {l:2,q:"Which investor type fits a 17-year-old best, and why?",opts:["Conservative — protect all money","Moderate — 50/50","Aggressive — decades before you need the money","It doesn't matter at this age"],ans:2,exp:"At 17 you have 40+ years before retirement. Time lets you ride out market crashes. Aggressive = more stocks, more risk, but historically much better long-term returns."},
+  {l:2,q:"What is VOO and why do experts recommend it for beginners?",opts:["A new tech startup stock","An ETF tracking the top 500 US companies — avg ~10%/year historically","A savings account with guaranteed returns","A cryptocurrency investment"],ans:1,exp:"VOO tracks the S&P 500 — the 500 biggest US companies. Historically averages ~10%/year. Even Warren Buffett recommends index funds for most people."},
+  {l:2,q:"What is the rule about a single stock's share of your portfolio?",opts:["Max 50% in one stock","Max 25% in one stock","Max 10% in one stock","No limit — concentrate on your best ideas"],ans:2,exp:"No single stock should be more than 10% of your portfolio. This protects you if that company hits bad news. Diversification = protection."},
+  {l:3,q:"What is EPS and why does it matter?",opts:["Earnings Per Sale — daily revenue","Earnings Per Share — profit the company makes per share","Extra Payment System — how dividends are paid","Equity Premium Score — a company rating"],ans:1,exp:"EPS = Earnings Per Share = Total Profit ÷ Number of Shares. Growing EPS means the company is more profitable over time. Shrinking EPS is a warning sign."},
+  {l:3,q:"A stock has a P/E of 50. The S&P 500 average is 22. What does this suggest?",opts:["The stock is cheap and a great buy","The stock is priced expensively — investors expect very high future growth","The company has 50x more debt than earnings","P/E doesn't matter for beginners"],ans:1,exp:"P/E of 50 vs average 22 means people pay much more than normal. This isn't always bad — high-growth companies often trade at high P/E. But it means less room for error."},
+  {l:3,q:"Which is a green flag when researching a stock?",opts:["Revenue shrinking 2 straight years","P/E ratio 5x higher than competitors","Revenue AND profit both growing year over year","The CEO just sold all their shares"],ans:2,exp:"Revenue + profit both growing = the company is expanding AND becoming more efficient. A CEO selling shares is a yellow flag worth investigating further."},
+  {l:3,q:"What is the difference between revenue and profit?",opts:["They are the same thing","Revenue is total money coming IN. Profit is what's LEFT after all expenses.","Profit is total money coming in. Revenue is what's left after expenses.","Revenue only counts product sales. Profit includes all income."],ans:1,exp:"Revenue = all money coming in (like your gross paycheck). Profit = what's left after paying all bills (like take-home pay). A company can have huge revenue but still lose money."},
+  {l:4,q:"The market drops 30%. Your portfolio is down. What should most long-term investors do?",opts:["Sell everything to stop further losses","Move everything to cash","Stay invested — every crash in history has recovered","Buy gold instead"],ans:2,exp:"Every major market crash in history recovered and hit new highs. COVID 2020: down 34%, recovered in 6 months. People who stayed invested made it all back — and more."},
+  {l:4,q:"What is FOMO buying and why is it dangerous?",opts:["Buying stocks early before they're popular","Buying a stock because everyone is talking about it — usually at the top","Fear of Missing Out on dividend payments","Automatically buying stocks every month"],ans:1,exp:"GameStop hit $400 because of social media hype, then crashed to $20. By the time something is trending on TikTok, it's usually too late to profit from it."},
+  {l:4,q:"$1,000 at age 17 vs $1,000 at age 27 (both 10%/year). How much bigger is the age-17 portfolio at 65?",opts:["About $5,000 more","About $20,000 more","About $50,000+ more","Exactly the same"],ans:2,exp:"Age 17 → ~$88,000 at 65. Age 27 → ~$34,000. The 10 extra years of compounding creates a $54,000+ difference from the same $1,000. Time is your biggest asset."},
+  {l:4,q:"What is the most important rule about WHEN to invest?",opts:["Wait for the perfect low price","Only invest during bull markets","Invest consistently every month — stop trying to time the market","Only invest when the economy is growing"],ans:2,exp:"'Time in the market beats timing the market.' Nobody consistently predicts market highs and lows. Regular investing (dollar-cost averaging) beats trying to pick the perfect moment."},
+  {l:5,q:"What is a Roth IRA and why open one at 18?",opts:["A checking account with low fees","A retirement account where your money grows TAX-FREE forever","A government grant for college students","A savings account only for wealthy people"],ans:1,exp:"Roth IRA = you invest after-tax money, it grows completely tax-free, and you pay ZERO taxes at retirement. Starting at 18 with consistent contributions can create millions — tax free."},
+  {l:5,q:"Which brokerage is best for beginners starting with real money?",opts:["Apps that celebrate trades with confetti","Fidelity or Charles Schwab — $0 minimum, no tricks","Crypto exchanges for higher returns","Apps that allow 24/7 trading"],ans:1,exp:"Fidelity and Schwab are trusted, regulated, no minimum required, and don't incentivize overtrading. Avoid apps designed to make trading feel like a game — they encourage bad habits."},
+  {l:5,q:"What is the key takeaway from the entire StockUp curriculum?",opts:["You need a finance degree to invest","Investing is only for adults with full-time jobs","You now know more about investing than 90% of adults — this is just the beginning","Stick to savings accounts until the market is stable"],ans:2,exp:"In 6 lessons you learned compound interest, stocks and ETFs, portfolio building, financial metrics, risk psychology, and real tools. Most adults were never taught any of this. You have a head start."},
+];
+
+const LETTERS=['A','B','C','D'];
+let current=0,score=0,streak=0,bestStreak=0,answered=false,startTime=0,totalTime=0;
+
+function startScreen(){
+  const r=document.getElementById('root');
+  r.innerHTML=`
+  <div class="start-wrap">
+    <div class="start-title">Test your investing knowledge</div>
+    <div class="start-sub">22 questions across 6 lessons. No experience needed — just what you picked up from StockUp.</div>
+    <div class="lesson-grid">
+      ${LESSONS.map((l,i)=>`<div class="lg-card"><div class="lg-num" style="color:${l.color}">Lesson ${i+1}</div><div class="lg-title">${l.label.split('— ')[1]}</div></div>`).join('')}
+    </div>
+    <button class="btn-start" onclick="startQuiz()">Start quiz <i class="ti ti-arrow-right" aria-hidden="true"></i></button>
+  </div>`;
+}
+
+function startQuiz(){
+  current=0;score=0;streak=0;bestStreak=0;answered=false;startTime=Date.now();totalTime=0;
+  render();
+}
+
+function render(){
+  const r=document.getElementById('root');
+  if(current>=QS.length){showScore();return;}
+  const pct=Math.round((current/QS.length)*100);
+  const q=QS[current];
+  const les=LESSONS[q.l];
+  r.innerHTML=`
+  <div class="progress-row">
+    <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
+    <div class="progress-label">${current+1} / ${QS.length}</div>
+  </div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+    <span class="lesson-pill" style="background:${les.bg};color:${les.text}">${les.label}</span>
+    <span class="streak${streak>=3?' active':''}" id="streak-badge"><i class="ti ti-flame" aria-hidden="true"></i> ${streak} streak</span>
+  </div>
+  <div class="question">${q.q}</div>
+  <div class="options" id="opts">
+    ${q.opts.map((o,i)=>`<button class="opt" id="opt${i}" onclick="answer(${i})"><span class="opt-letter">${LETTERS[i]}</span>${o}</button>`).join('')}
+  </div>
+  <div id="exp" style="display:none"></div>
+  <button class="btn-next" id="nxt" disabled onclick="next()">Next <i class="ti ti-arrow-right" aria-hidden="true"></i></button>`;
+}
+
+function answer(idx){
+  if(answered)return;
+  answered=true;
+  const q=QS[current];
+  document.querySelectorAll('.opt').forEach(o=>o.disabled=true);
+  const chosen=document.getElementById('opt'+idx);
+  const correct=document.getElementById('opt'+q.ans);
+  chosen.classList.add(idx===q.ans?'correct':'wrong');
+  if(idx!==q.ans)correct.classList.add('reveal');
+  if(idx===q.ans){score++;streak++;if(streak>bestStreak)bestStreak=streak;}else{streak=0;}
+  const badge=document.getElementById('streak-badge');
+  if(badge){badge.className='streak'+(streak>=3?' active':'');}
+  const expEl=document.getElementById('exp');
+  expEl.style.display='block';
+  expEl.innerHTML=`<strong>${idx===q.ans?'Correct!':'Not quite.'}</strong> ${q.exp}`;
+  document.getElementById('nxt').disabled=false;
+}
+
+function next(){
+  current++;answered=false;render();
+}
+
+function showScore(){
+  totalTime=Math.round((Date.now()-startTime)/1000);
+  const pct=Math.round(score/QS.length*100);
+  const circleColor=pct>=80?'#E1F5EE':pct>=60?'#FFF8E1':'#FCEBEB';
+  const textColor=pct>=80?'#085041':pct>=60?'#633806':'#791F1F';
+  const msg=pct>=90?'Outstanding — you\'re ready to teach this.':pct>=75?'Strong work! Review the ones you missed.':pct>=60?'Good effort — re-read the flagged lessons.':'Keep going — revisit the curriculum and try again.';
+  const mins=Math.floor(totalTime/60);
+  const secs=totalTime%60;
+  const timeStr=mins>0?`${mins}m ${secs}s`:`${secs}s`;
+  document.getElementById('root').innerHTML=`
+  <div class="score-wrap">
+    <div class="score-circle" style="background:${circleColor}">
+      <div class="score-pct" style="color:${textColor}">${pct}%</div>
+      <div class="score-sub" style="color:${textColor}">${score}/${QS.length}</div>
+    </div>
+    <div class="score-msg">${msg}</div>
+    <div class="score-note">You answered ${score} out of ${QS.length} questions correctly across all 6 StockUp lessons.</div>
+    <div class="score-breakdown">
+      <div class="sb-card"><div class="sb-label">Best streak</div><div class="sb-val">${bestStreak} <i class="ti ti-flame" style="font-size:14px;color:#BA7517" aria-hidden="true"></i></div></div>
+      <div class="sb-card"><div class="sb-label">Time taken</div><div class="sb-val">${timeStr}</div></div>
+      <div class="sb-card"><div class="sb-label">Accuracy</div><div class="sb-val">${pct}%</div></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn-outline" onclick="startQuiz()"><i class="ti ti-refresh" aria-hidden="true"></i> Try again</button>
+      <button class="btn-outline" onclick="sendPrompt('I scored ${pct}% on the StockUp quiz. Can you explain the investing concepts I need to review?')">Review weak spots ↗</button>
+    </div>
+  </div>`;
+}
+
+startScreen();
+</script>
